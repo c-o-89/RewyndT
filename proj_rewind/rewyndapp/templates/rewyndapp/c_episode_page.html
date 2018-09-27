@@ -1,0 +1,137 @@
+{% extends "rewyndapp/b_base_nav.html" %}
+
+{% block title %}Tweets for: {{tweet_list.0.episode.episode_name}}{% endblock title %}
+{% block header %} {{ block.super }} {% endblock header %}
+{% block h1 %}<h1 class="text-center title_text">Tweets for: {{tweet_list.0.episode.episode_name}}</h1>{% endblock h1 %}
+{% block content %}
+  {% load static %}
+  {% if tweet_list %}
+    <div class="container">
+      <div class="row mx-0 mb-1 py-2 px-1" >
+        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks" id="clock1">0:00:00</div>
+        <div class="col p-0 my-auto">
+          <input type="range" class="slider my-auto" id="timeslider" min="0" max="1800000" value=0>
+        </div>
+        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks" id="clock2">-0:30:00</div>
+      </div>
+    </div>
+    <div class="container mb-2">
+      <button type="button" class="btn btn-info btn-block" id="play_pause" onclick="toggleTime()">Play</button>
+    </div>
+    <div class="container">
+      <div class="d-flex flex-column-reverse align-items-center">
+        {% for tweet in tweet_list %}
+          <div class="card w-100 pb-0 mb-2 tweetcard" style="display:none" time_stamp="{% widthratio forloop.counter 1 2000 %}" id="time-{% widthratio forloop.counter 1 2000 %}" >
+            <div class="card-body px-2 pt-2 pb-0">
+              <p class="h6 card-title d-inline-flex mb-1">{{ tweet.tweeter.name }}</p>
+              <p class="h6 card-subtitle d-inline-flex text-muted">@{{ tweet.tweeter.screen_name }}</p>
+              <p class="card-text">{{ tweet.text }}</p>
+            </div>
+            <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
+                <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
+                <div class="m-1 mr-3">{{ tweet.retweets }}</div>
+                <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="loop-square">
+                <div class="m-1">{{ tweet.favorites }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  {% else %}
+    <p>No tweets are available.</p>
+  {% endif %}
+{% endblock content %}
+{% block scripts %}{{ block.super }}
+    <script>jQuery(".tweetcard").fitText(2, {minFontSize: '8px', maxFontSize: '16px'});</script>
+    <script>jQuery(".clocks").fitText(0.5, {minFontSize: '10px', maxFontSize: '16px'});</script>
+    <script>
+
+    var sec_ms = 1000;
+    var min_ms = 1000*60;
+    var hour_ms = 1000*60*60;
+    var day_ms = 1000*60*60*24;
+
+    // adds leading zeros for time formatting
+    function zeroPad(num, places) {
+      var zero = places - num.toString().length + 1;
+      return Array(+(zero > 0 && zero)).join("0") + num;
+    }
+
+    // formats milliseconds to time
+    function formatTime(t) {
+      var days = Math.floor(t/day_ms);
+      var hours = Math.floor((t % day_ms)/hour_ms);
+      var minutes = Math.floor((t % hour_ms)/min_ms);
+      var seconds =  Math.floor((t % min_ms)/sec_ms);
+
+      return hours + ':' + zeroPad(minutes,2) + ':' + zeroPad(seconds,2)
+    }
+
+    // Code for updating the clocks as the slider moves
+    var duration_min = 30;
+    var slider = $("#timeslider");
+    var start_time = $("#clock1");
+    var remain_time = $("#clock2");
+    var tweetc = $(".tweetcard");
+    //start_time.innerHTML = formatTime(slider.val()); // display default slider value
+
+    // functions for updating the clock values with the slider value
+    function updateClock1(){
+      $("#clock1").html(formatTime(slider.val()));
+    }
+
+    function updateClock2(){
+      $("#clock2").html("-" + formatTime(duration_min*min_ms - slider.val() ));
+    }
+
+    // Update the clock values when you you drag the slider handle
+    slider.on('input', function(){
+      updateClock1();
+      updateClock2();
+      toggleTweet();
+    })
+
+    // toggles the timer on and off
+    var timer_on = 0;
+    var timer;
+    function toggleTime() {
+      if (timer_on == 1) {
+        timer_on = 0;
+        clearInterval(timer);
+        $("#play_pause").html("Play");
+      } else {
+        timer_on = 1;
+        timer = setInterval(incrementTime, 1000);
+        $("#play_pause").html("Pause");
+      };
+    }
+
+    // increments slider value by one second each seconds
+    function incrementTime() {
+      if (Number(slider.val()) < Number(slider.attr('max'))) {
+        var x = Number(slider.val()) + 1000;
+        slider.val(x);
+        slider.attr('value',x);
+        updateClock1();
+        updateClock2();
+        toggleTweet();
+      }
+    }
+
+    // shows or hides the tweet depending on the timestamp
+    function toggleTweet() {
+      var x_hide = tweetc.filter(function(index) {
+        return Number($(this).attr("time_stamp")) <= Number(slider.val());
+      }).slideDown();
+      var x_show = tweetc.filter(function(index) {
+        return Number($(this).attr("time_stamp")) > Number(slider.val());
+      }).hide();
+    }
+
+    // testing function
+    function showT() {
+      $("#time-40000").slideDown();
+    }
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,38 @@
+{% extends "rewyndapp/b_base_nav.html" %}
+
+{% block title %} {{episode_list.0.program}} Episodes {% endblock title %}
+{% block h1 %} <h1 class="text-center mb-3">{{episode_list.0.program}} Episodes</h1> {% endblock h1 %}
+{% block content %}
+{% if episode_list %}
+  <div class="container w-75">
+    {% for season in seasons %}
+    <div class="List-group" id="Season {{ season }}">
+      <button type="button" class="ses btn btn-secondary btn-block my-2"><b>Season {{ season }}</b></button>
+      <div style="display:none" >
+      {% for episode in episode_list %}
+        {% if season == episode.season_num %}
+        <a class="list-group-item list-group-item-action" href="{% url 'rewyndapp:episode_page' episode.id %}">Ep. {{ episode.episode_num }} - {{ episode.episode_name }}</a>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>No episodes are available.</p>
+{% endif %}
+{% endblock content %}
+{% block scripts %} {{ block.super }}
+    <script>jQuery("h1").fitText(1, {minFontSize: '16px', maxFontSize: '40px'});</script>
+      <script>jQuery("a.list-group-item").fitText(1.2, {minFontSize: '12px', maxFontSize: '16px'});</script>
+    <script>
+    // toggles visibility of the episode list dropdown and highlists the select season
+    $("button.ses").click(e => {
+      var cur = $(e.currentTarget);
+      cur.toggleClass('active');
+      cur.siblings().slideToggle();
+
+    }) //toggleClass('active');
+
+    </script>
+{% endblock scripts %}

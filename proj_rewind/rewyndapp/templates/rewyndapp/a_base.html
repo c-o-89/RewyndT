@@ -1,0 +1,32 @@
+<!doctype html>
+<html class="h-100" lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'rewyndapp/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rewyndapp/custom.css' %}">
+    {#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">#}
+    {% block head%}{% endblock head%}
+    <title>{% block title %}Hello Rewynd!{% endblock %}</title>
+  </head>
+  {% block bodytag %}<body>{% endblock bodytag %}
+    {% block header %}{% endblock header %}
+    {% block h1 %}<h1>Hello, world! Here's h1</h1>{% endblock h1 %}
+    {% block content %}<p>Content Goes Here!</p>{% endblock content %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'rewyndapp/jquery_331min.js' %}"></script>
+    <script src="{% static 'rewyndapp/fittext.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="{% static 'rewyndapp/bootstrap.min.js' %}"></script>
+    <script src="{% static 'rewyndapp/custom.js' %}"></script>
+    {% block scripts %}
+    <script>jQuery(".title_text").fitText(1, {minFontSize: '20px', maxFontSize: '30px'});</script>
+    {% endblock scripts %}
+  </body>
+</html>

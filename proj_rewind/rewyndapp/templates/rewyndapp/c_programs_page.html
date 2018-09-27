@@ -1,0 +1,37 @@
+{% extends "rewyndapp/b_base_nav.html" %}
+
+{% block title %}Programs{% endblock title %}
+{% block h1 %}<div class="h1 text-center"></div>{% endblock h1 %}
+{% block content %}
+{% load static %}
+{% if program_list %}
+    <div class="container">
+      <div id="carouselExampleSlidesOnly" class="carousel slide mt-3" data-ride="carousel">
+        {% for program in program_list %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <a href="{% url 'rewyndapp:program_listview' program.id %}">
+            <img class="d-block w-100" src="/static/rewyndapp/images/{{program.image_path}}" alt="First slide">
+          </a>
+          <div class="carousel-caption py-0 mb-0">
+            <h5 class="display-4 carousel_text">{{program.name}}</h5>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  <hr />
+  <div class="container">
+    <div class="List-group">
+    {% for program in program_list %}
+      <a class="list-group-item list-group-item-action" href="{% url 'rewyndapp:program_listview' program.id %}">{{ program.name }}</a>
+    {% endfor %}
+    </div>
+  </div>
+{% else %}
+    <p>No programs are available.</p>
+{% endif %}
+{% endblock content %}
+{% block scripts %}
+{{ block.super }}
+<script>jQuery(".carousel_text").fitText(1, {minFontSize: '26px', maxFontSize: '32px'});</script>
+{% endblock scripts %}
