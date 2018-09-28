@@ -43,7 +43,6 @@ def search(url, qs):
                 print(qs)
         else:
             print("Statuses not found")
-            print(obj)
             break
     return statuses
 
