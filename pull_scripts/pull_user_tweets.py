@@ -3,13 +3,17 @@
 
 import tweepy #https://github.com/tweepy/tweepy
 import json
-
+import os
+import sys
+lib_path = os.path.abspath(os.path.join(__file__, '..', '..', '..', 'credens'))
+sys.path.append(lib_path)
+import creds
 
 #Twitter API credentials
-consumer_key = 'insert key here'
-consumer_secret = 'insert key here'
-access_token = 'insert key here'
-access_secret = 'insert key here'
+consumer_key = creds.consumer_key
+consumer_secret = creds.consumer_secret
+access_key = creds.access_key
+access_secret = creds.access_secret
 
 
 def get_all_tweets(screen_name):
@@ -36,7 +40,7 @@ def get_all_tweets(screen_name):
     #keep grabbing tweets until there are no tweets left to grab
     while len(new_tweets) > 0:
 
-        #all subsiquent requests use the max_id param to prevent duplicates
+        #all subsequent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
 
         #save most recent tweets
@@ -45,18 +49,23 @@ def get_all_tweets(screen_name):
         #update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
 
-        print "...%s tweets downloaded so far" % (len(alltweets))
+        print("...%s tweets downloaded so far" % (len(alltweets)))
 
     #write tweet objects to JSON
-    file = open('tweet.json', 'wb')
-    print "Writing tweet objects to JSON please wait..."
+    out_file = open('../../outputs/tweets_output_{}.json'.format(screen_name), 'a+')
+    print("Writing tweet objects to JSON please wait...")
+    out_json = []
     for status in alltweets:
-        json.dump(status._json,file,sort_keys = True,indent = 4)
+        out_json.extend([status._json])
+    out_file.write(json.dumps(out_json, sort_keys = True, indent = 2))
+    #    out_file.write(json.dumps(status._json,sort_keys = True,indent = 2))
 
     #close the file
-    print "Done"
-    file.close()
+    print("Done")
+    out_file.close()
 
+# this means that if this script is executed, then the remaining code is executed
 if __name__ == '__main__':
-    #pass in the username of the account you want to download
-    get_all_tweets("@Cornelius_Jay")
+    #the user will be prompted to pass in the username of the account they want to download tweets from
+    print("You're about to pull all the tweets for a user.")
+    get_all_tweets(input("Please enter the user's screen name, e.g. @nasa -->  "))
