@@ -5,4 +5,4 @@
 
 ## *This is a test
 
-this is test text in the TestB branch
+I've deleted the previous test text before merging.
