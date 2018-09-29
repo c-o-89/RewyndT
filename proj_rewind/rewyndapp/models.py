@@ -18,6 +18,7 @@ class Program(models.Model):
     def __str__(self):
         return self.name
 
+# Need to add an array field for hashtags!!
 class Episode(models.Model):
     id = models.AutoField(primary_key=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)

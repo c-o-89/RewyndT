@@ -57,7 +57,7 @@ def get_all_tweets(screen_name):
     out_json = []
     for status in alltweets:
         out_json.extend([status._json])
-    out_file.write(json.dumps(out_json, sort_keys = True, indent = 2))
+    out_file.write(json.dumps(out_json, indent = 2))
     #    out_file.write(json.dumps(status._json,sort_keys = True,indent = 2))
 
     #close the file
