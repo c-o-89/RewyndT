@@ -32,7 +32,7 @@ def program_listview(request, program_id):
     return render(request, template, context)
 
 def episode_page(request, id):
-    tweet_list = Episode.objects.get(pk=id).tweet_set.filter(is_active=True, is_retweet=False, favorites__gt=3).order_by('interval')
+    tweet_list = Episode.objects.get(pk=id).tweet_set.filter(is_active=True, is_retweet=False, favorites__gte=3).order_by('interval')
     template = "rewyndapp/c_episode_page.html"
     context = {
         "tweet_list":tweet_list,
