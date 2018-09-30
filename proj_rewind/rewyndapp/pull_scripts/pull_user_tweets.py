@@ -3,7 +3,7 @@
 
 import tweepy #https://github.com/tweepy/tweepy
 import json, os, sys, time, pprint
-lib_path = os.path.abspath(os.path.join(__file__, '..', '..', '..', '..', '..', 'credens'))
+lib_path = os.path.abspath(os.path.join(__file__, '..', '..', '..', '..', 'ignored', 'credens'))
 sys.path.append(lib_path)
 import creds
 
@@ -51,7 +51,7 @@ def get_all_tweets(screen_name):
         print("...%s tweets downloaded so far" % (len(alltweets)))
 
     #write tweet objects to JSON
-    out_file = open('../../../../outputs/{}.json'.format(screen_name), 'a+')
+    out_file = open(os.path.join(__file__, '..', '..', '..', '..', 'ignored', 'outputs', '{}.json'.format(screen_name)), 'a+')
     print("Writing tweet objects to JSON please wait...")
     out_json = []
     for status in alltweets:

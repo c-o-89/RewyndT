@@ -1,4 +1,4 @@
-import sys, importlib, json, datetime, csv, glob, html
+import sys, importlib, json, datetime, csv, glob, html, os
 from .models import Program, Episode, Tweeter, Tweet
 from django.utils import timezone
 
@@ -175,7 +175,7 @@ def add_tweets(filepath, cont="n"):
 # Method for adding tweets from json files in a folder
 def batch_add():
     b_start = timezone.now()
-    json_files = glob.glob("../../outputs/*.json")
+    json_files = glob.glob("../ignored/outputs/*.json")  
     for json_file in json_files:
         print("Parsing file {}".format(json_file))
         add_tweets(json_file, "y")
