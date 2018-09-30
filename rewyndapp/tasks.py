@@ -175,7 +175,7 @@ def add_tweets(filepath, cont="n"):
 # Method for adding tweets from json files in a folder
 def batch_add():
     b_start = timezone.now()
-    json_files = glob.glob("../ignored/outputs/*.json")  
+    json_files = glob.glob("./ignored/outputs/*.json")  
     for json_file in json_files:
         print("Parsing file {}".format(json_file))
         add_tweets(json_file, "y")
@@ -191,7 +191,7 @@ def batch_add():
 
 
 # Method for adding episodes from csv file
-def add_episodes(filepath):
+def add_episodes(filepath, program_id):
     start = timezone.now()
     rowcount = 0
     with open(filepath, newline="") as csvfile:
@@ -201,7 +201,7 @@ def add_episodes(filepath):
         for row in contents:
             rowcount += 1
             episode, ep_created = Episode.objects.update_or_create(
-                program = Program.objects.get(pk=1),
+                program = Program.objects.get(pk=program_id),
                 season_num = int(row.get("season_num")),
                 episode_num = int(row.get("episode_num")),
                 defaults={
