@@ -1,2 +1,2 @@
 # Text backup files
-*.ignored
+/ignored
