@@ -13,6 +13,7 @@ class Program(models.Model):
     name = models.CharField(max_length=200)
     image_path = models.CharField(max_length=200, default="placeholder.jpeg")
     year_created = models.DateField()
+    is_active = models.BooleanField(null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -27,6 +28,7 @@ class Episode(models.Model):
     episode_name = models.CharField(max_length=100)
     episode_len = models.DurationField()
     air_datetime = models.DateTimeField()
+    is_active = models.BooleanField(null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -40,6 +42,7 @@ class Tweeter(models.Model):
     followers = models.IntegerField(default=0)
     statuses = models.IntegerField(default=0)
     profile_image_url = models.URLField(max_length=200)
+    is_active = models.BooleanField(null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -52,11 +55,13 @@ class Tweet(models.Model):
     tweet_datetime = models.DateTimeField('date of tweet')
     tweet_id = models.CharField(max_length=200, unique=True)
     text = models.CharField(max_length=200)
-    interval = models.DurationField() #need to make this a calculation
+    interval = models.DurationField()
     truncated = models.BooleanField(null=False)
     retweets = models.IntegerField(default=0)
     favorites = models.IntegerField(default=0)
     result_type = models.CharField(max_length=20)
+    is_retweet = models.BooleanField(null=False, default=False)
+    is_active = models.BooleanField(null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     def __str__(self):

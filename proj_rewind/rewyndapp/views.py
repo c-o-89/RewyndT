@@ -12,7 +12,7 @@ def index(request):
     return render(request, template)
 
 def programs_page(request):
-    program_list = Program.objects.all()
+    program_list = Program.objects.filter(is_active=True)
     template = "rewyndapp/c_programs_page.html"
     context = {
         "program_list": program_list,
@@ -20,7 +20,7 @@ def programs_page(request):
     return render(request, template, context)
 
 def program_listview(request, program_id):
-    episode_list = Program.objects.get(pk=program_id).episode_set.all()
+    episode_list = Program.objects.get(pk=program_id).episode_set.filter(is_active=True)
     # use get_list_or_404 here
     w = map(lambda x: x.season_num, episode_list)
     seasons = list(set(w))
@@ -32,12 +32,10 @@ def program_listview(request, program_id):
     return render(request, template, context)
 
 def episode_page(request, id):
-    tweet_list = Episode.objects.get(pk=id).tweet_set.all()[:20]
-    tweet_list2 = Episode.objects.get(pk=id).tweet_set.filter(interval__gte=datetime.timedelta(0, 0))
+    tweet_list = Episode.objects.get(pk=id).tweet_set.filter(is_active=True, is_retweet=False, favorites__gt=3).order_by('interval')
     template = "rewyndapp/c_episode_page.html"
     context = {
         "tweet_list":tweet_list,
-        "tweet_list2":tweet_list2,
     }
     return render(request, template, context)
 
