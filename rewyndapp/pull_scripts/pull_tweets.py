@@ -50,7 +50,7 @@ def search(url, qs):
 statuses = search('/1.1/search/tweets.json', [
   ('q', '#insecurehbo'),
   ('count', '500'),
-  ('result_type', 'popular')
+  ('result_type', 'recent')
 ])
 
 out_file = open('output.json', 'a+')
