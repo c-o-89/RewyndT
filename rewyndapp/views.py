@@ -7,7 +7,6 @@ from .models import Program, Episode, Tweeter, Tweet
 import datetime
 
 def index(request):
-    response = "Hello, world. You're at the index."
     template = "rewyndapp/b_index.html"
     return render(request, template)
 
