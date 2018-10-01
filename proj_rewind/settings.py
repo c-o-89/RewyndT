@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'xaqg&s80_jet$kza&k9g@yx+*74gr!*88&3&q$8&1s8@g)7fm4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 #ALLOWED_HOSTS = ['<your app URL without the https:// prefix>.herokuapp.com','127.0.0.1']
 ALLOWED_HOSTS = ['rewyndapp-heroku.herokuapp.com', '127.0.0.1']
