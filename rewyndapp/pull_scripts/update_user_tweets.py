@@ -26,7 +26,7 @@ def get_all_tweets(screen_name):
     alltweets = []
 
     #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=200)
+    new_tweets = api.user_timeline(screen_name = screen_name,count=200,since_id=1044097796360462336)
 
     #save most recent tweets
     alltweets.extend(new_tweets)
@@ -58,12 +58,13 @@ def get_all_tweets(screen_name):
     for status in alltweets:
         out_json.extend([status._json])
     out_file.write(json.dumps(out_json, indent = 2))
+    #    out_file.write(json.dumps(status._json,sort_keys = True,indent = 2))
 
     #close the file
     print("Done")
     out_file.close()
 
-names = []
+names = ["MissGL__","vdeIrossi"]
 
 
 # this means that if this script is executed, then the remaining code is executed
