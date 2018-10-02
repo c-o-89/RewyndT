@@ -4,6 +4,7 @@
 
 from django.shortcuts import render
 from .models import Program, Episode, Tweeter, Tweet
+from .tasks import sdelta
 import datetime
 
 def index(request):
@@ -35,6 +36,7 @@ def episode_page(request, id):
     template = "rewyndapp/c_episode_page.html"
     context = {
         "tweet_list":tweet_list,
+        "sdelta":sdelta.seconds*1000,
     }
     return render(request, template, context)
 

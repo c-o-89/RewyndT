@@ -16,6 +16,9 @@ def get_time(d):
 # Time delta for west coast vs east coast
 tdelta = datetime.timedelta(hours = 3)
 
+# Time delta for capturing tweets after the show ends
+sdelta = datetime.timedelta(minutes = 15)
+
 # Reads json from file
 def read_json(filepath):
     with open(filepath, "r") as f:
@@ -23,12 +26,24 @@ def read_json(filepath):
         print("File is {} objects long".format(len(obj)))
         return(obj)
 
+# Writes object to json file
+def write_json(obj,name):
+    a = datetime.datetime.now().strftime('%Y-%m-%d')
+    out_file = open("./ignored/outputs/{}_{}.json".format(name,a), 'a+')
+    print("Writing objects to JSON please wait...")
+    out_file.write(json.dumps(obj, indent = 2))
+
+    #close the file
+    print("Done")
+    out_file.close()
+
+
 # Takes tweets from json files and assigns them to an episode
 # Returns a list containing dicts of episode pks and tweet objects
 """id = 1 for insecure. TBU"""
 def filter_tweets(obj):
     episode_list = Program.objects.get(id = 1).episode_set.all()
-    ep_hashtags = ["InsecureHBO", "LawrenceHive"]
+    ep_hashtags = ["InsecureHBO", "LawrenceHive", "Insecuritea", "chadhive"]
     episode_dict = {}
     tweet_dicts = []
 
@@ -38,10 +53,13 @@ def filter_tweets(obj):
         episode_dict[i.id] = {'start': start, 'end': end}
 
     # for each episode:
+    # is it a retweet?
     # does the tweet contain the hashtags?
     for t_item in obj:
         hashtags = t_item.get("entities").get("hashtags")
-        if len(hashtags) == 0:
+        if "retweeted_status" in t_item:
+            continue
+        elif len(hashtags) == 0:
             continue
         else:
             hashtag_list = []
@@ -55,18 +73,41 @@ def filter_tweets(obj):
                     match = True
                     #  was the tweet created during the episode?
                     for k,v in episode_dict.items():
-                        if v['start'] <= get_time(t_item) <= v['end']:
+                        if v['start'] <= get_time(t_item) <= v['end'] + sdelta:
                             tweet_dicts.append({"episode_id": k, "tweet": t_item})
                             # ends the loop once the episode is found
                             break
                         # tries to match tweets from west coast showings
-                        elif v['start'] <= get_time(t_item) - tdelta <= v['end']:
+                        elif v['start'] <= get_time(t_item) - tdelta <= v['end'] + sdelta:
                             tweet_dicts.append({"episode_id": k, "tweet": t_item})
                             break
 
 
     print("{} tweets filtered".format(len(tweet_dicts)))
     return(tweet_dicts)
+
+
+# get media links from tweet object
+def parse_media(tweet_obj):
+    entities = tweet_obj.get("entities")
+    has_media = "media" in entities
+
+    # what type of media
+    media_type = None
+    media_image_url = None
+    if has_media:
+        a = tweet_obj["extended_entities"]["media"][0]
+        media_type = a["type"]
+
+        if media_type == "animated_gif":
+            media_image_url = a["video_info"]["variants"][0]["url"]
+        elif media_type == "video":
+            b = a["video_info"]["variants"]
+            c = sorted(b, key=lambda k: k.get('bitrate',0), reverse=True)
+            media_image_url = c[0]["url"]
+        elif media_type == "photo":
+            media_image_url = a["media_url"]
+    return(has_media, media_type, media_image_url)
 
 
 # Method for upserting a single tweet and tweeter from a tweet object
@@ -100,6 +141,9 @@ def upsert_tweet(tweet_obj, ep_id):
     else:
         interval = tweet_time - episode_obj.air_datetime
 
+    # pull media if tweet has media
+    has_media, media_type, media_image_url = parse_media(tweet_obj)
+
     # checks whether tweet object exists, updates if so, creates if not
     tweet, tw_created = Tweet.objects.update_or_create(
         tweet_id = tweet_obj.get("id"),
@@ -107,13 +151,17 @@ def upsert_tweet(tweet_obj, ep_id):
             "episode": episode_obj,
             "tweeter": Tweeter.objects.get(id=tweeter.id),
             "tweet_datetime": tweet_time,
-            "text": html.unescape(tweet_obj.get("text")),
+            "text": html.unescape(tweet_obj.get("text")).split("https")[0],
             "interval": interval,
             "truncated":tweet_obj.get("truncated"),
             "retweets": tweet_obj.get("retweet_count"),
             "favorites": tweet_obj.get("favorite_count"),
             "is_retweet": "retweeted_status" in tweet_obj,
             "result_type": result_type,
+            "has_media": has_media,
+            "media_type": media_type,
+            "media_image_url": media_image_url,
+
         }
     )
     tweet.save()
