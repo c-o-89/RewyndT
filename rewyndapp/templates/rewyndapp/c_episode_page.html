@@ -2,36 +2,46 @@
 
 {% block title %}Tweets for: {{tweet_list.0.episode.episode_name}}{% endblock title %}
 {% block header %} {{ block.super }} {% endblock header %}
-{% block h1 %}<h1 class="text-center title_text">Tweets for: {{tweet_list.0.episode.episode_name}}</h1>{% endblock h1 %}
+{% block h1 %}<h1 class="text-center mt-2 mb-0 restext_title">Tweets for: {{tweet_list.0.episode.episode_name}}</h1>{% endblock h1 %}
 {% block content %}
   {% load static %}
   {% load custom_tags %}
   {% if tweet_list %}
     <div class="container">
       <div class="row mx-0 mb-1 py-2 px-1" >
-        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks" id="clock1">0:00:00</div>
+        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks restext_1" id="clock1">0:00:00</div>
         <div class="col p-0 my-auto">
           <input type="range" class="slider my-auto" id="timeslider" min="0" max="{{tweet_list.0.episode.episode_len|interval|add:sdelta}}" value=0>
         </div>
-        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks" id="clock2">-0:45:00</div>
+        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks restext_1" id="clock2">-0:45:00</div>
       </div>
     </div>
-    <div class="container mb-2">
-      <button type="button" class="btn btn-info btn-block" id="play_pause" onclick="toggleTime()">Play</button>
+      <div class="container mb-2">
+        <div class="m-auto row">
+        <button type="button" class="btn btn-alert col-auto mx-2" id="control-back" onclick="skipBack()">
+          <img class="iconer" src="{% static 'rewyndapp/images/media-skip-backward.svg' %}" alt="skip-backward">
+        </button>
+        <button type="button" class="btn btn-success col" id="play_pause" onclick="toggleTime()">
+            Play
+        </button>
+        <button type="button" class="btn btn-alert col-auto mx-2" id="control-forward" onclick="skipForward()">
+          <img class="iconer" src="{% static 'rewyndapp/images/media-skip-forward.svg' %}" alt="skip-forward">
+        </button>
+      </div>
     </div>
     <div class="container">
       <div class="d-flex flex-column-reverse align-items-center">
         {% for tweet in tweet_list %}
-          <div class="card w-100 pb-0 mb-2 tweetcard" style="display:none" time_stamp="{{ tweet.interval|interval  }}" id="time-{{ tweet.interval|interval  }}" >
+          <div class="card w-100 pb-0 mb-2 tweetcard restext_2" style="display:none" time_stamp="{{ tweet.interval|interval  }}" id="time-{{ tweet.interval|interval  }}" >
             <div class="card-body px-2 pt-2 pb-0">
-              <p class="h6 card-title d-inline-flex mb-1">{{ tweet.tweeter.name }}</p>
-              <p class="h6 card-subtitle d-inline-flex text-muted">@{{ tweet.tweeter.screen_name }}</p>
-              <p class="card-text">{{ tweet.text }}</p>
+              <p class="h6 card-title d-inline-flex mb-1 restext_1">{{ tweet.tweeter.name }}</p>
+              <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@{{ tweet.tweeter.screen_name }}</p>
+              <p class="card-text mb-1">{{ tweet.text }}</p>
               {% if tweet.has_media %}
                 {% if tweet.media_type == "photo" %}
-              <img src="{{tweet.media_image_url}}" class="mb-2 twitmedia" alt="{{tweet.media_image_url}}">
+              <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
                 {% else %}
-              <video class="mb-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
+              <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
                 <source src="{{tweet.media_image_url}}" type="video/mp4"/>
               </video>
                 {% endif %}
@@ -55,8 +65,6 @@
   {% endif %}
 {% endblock content %}
 {% block scripts %}{{ block.super }}
-    <script>jQuery(".tweetcard").fitText(2, {minFontSize: '8px', maxFontSize: '16px'});</script>
-    <script>jQuery(".clocks").fitText(0.5, {minFontSize: '10px', maxFontSize: '16px'});</script>
     <script>
 
     var sec_ms = 1000;
@@ -97,11 +105,17 @@
       $("#clock2").html("-" + formatTime(duration_min*min_ms - slider.val() ));
     }
 
-    // Update the clock values when you you drag the slider handle
-    slider.on('input', function(){
+    // Update clocks and toggle tweets
+    function updateAll(){
       updateClock1();
       updateClock2();
       toggleTweet();
+    }
+
+
+    // Update the clock values when you you drag the slider handle
+    slider.on('input', function(){
+      updateAll();
     })
 
     // toggles the timer on and off
@@ -125,10 +139,24 @@
         var x = Number(slider.val()) + 1000;
         slider.val(x);
         slider.attr('value',x);
-        updateClock1();
-        updateClock2();
-        toggleTweet();
+        updateAll();
       }
+    }
+
+    // increments slider value by 15 seconds
+    function skipForward() {
+        var x = Math.min(Number(slider.val()) + 15000,{{tweet_list.0.episode.episode_len|interval|add:sdelta}});
+        slider.val(x);
+        slider.attr('value',x);
+        updateAll();
+    }
+
+    // decreases slider value by 15 seconds
+    function skipBack() {
+        var x = Math.max(Number(slider.val()) - 15000,0);
+        slider.val(x);
+        slider.attr('value',x);
+        updateAll();
     }
 
     // shows or hides the tweet depending on the timestamp

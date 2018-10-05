@@ -106,7 +106,7 @@ def parse_media(tweet_obj):
             c = sorted(b, key=lambda k: k.get('bitrate',0), reverse=True)
             media_image_url = c[0]["url"]
         elif media_type == "photo":
-            media_image_url = a["media_url"]
+            media_image_url = a["media_url_https"]
     return(has_media, media_type, media_image_url)
 
 
