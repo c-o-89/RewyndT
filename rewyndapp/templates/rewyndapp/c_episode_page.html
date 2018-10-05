@@ -61,6 +61,21 @@
             </div>
           </div>
         {% endfor %}
+              <div class="card w-100 pb-0 mb-2 tweetcard restext_2" time_stamp="0" id="preview" >
+                <div class="card-body px-2 pt-2 pb-0">
+                  <p class="h6 card-title d-inline-flex mb-1 restext_1">Rewynd</p>
+                  <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@rewynd_app</p>
+                  <p class="card-text mb-1">Ready to begin? Hit play to start! The first tweet is at {{ tweet_list.0.interval }}</p>
+                </div>
+                <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
+                    <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
+                    <div class="m-1 mr-3">323</div>
+                    <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="heart">
+                    <div class="m-1 mr-3">213</div>
+                    <img class="iconer" src="{% static 'rewyndapp/images/clock.svg' %}" alt="clock">
+                    <div class="m-1">0:00:00</div>
+                </div>
+            </div>
       </div>
     </div>
 
