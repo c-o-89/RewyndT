@@ -6,29 +6,33 @@
 {% block content %}
   {% load static %}
   {% load custom_tags %}
+  <div class="container p-0" style="max-width: 600px">
   {% if tweet_list %}
+  <!-- TIME SLIDER -->
     <div class="container">
-      <div class="row mx-0 mb-1 py-2 px-1" >
-        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks restext_1" id="clock1">0:00:00</div>
+      <div class="row mx-0 mb-1 py-2" >
+        <div class="col-auto pr-2 pl-0 clocks restext_1" id="clock1">0:00:00</div>
         <div class="col p-0 my-auto">
           <input type="range" class="slider my-auto" id="timeslider" min="0" max="{{tweet_list.0.episode.episode_len|interval|add:sdelta}}" value=0>
         </div>
-        <div class="px-2 col-2 col-md-1 my-auto mx-1 text-center clocks restext_1" id="clock2">-0:45:00</div>
+        <div class="col-auto pr-0 pl-2 clocks restext_1" id="clock2">-0:45:00</div>
       </div>
     </div>
+    <!-- CONTROL BUTTONS -->
       <div class="container mb-2">
         <div class="m-auto row">
-        <button type="button" class="btn btn-alert col-auto mx-2" id="control-back" onclick="skipBack()">
+        <button type="button" class="btn btn-alert col-auto mr-2" id="control-back" onclick="skipBack()">
           <img class="iconer" src="{% static 'rewyndapp/images/media-skip-backward.svg' %}" alt="skip-backward">
         </button>
         <button type="button" class="btn btn-success col" id="play_pause" onclick="toggleTime()">
             Play
         </button>
-        <button type="button" class="btn btn-alert col-auto mx-2" id="control-forward" onclick="skipForward()">
+        <button type="button" class="btn btn-alert col-auto ml-2" id="control-forward" onclick="skipForward()">
           <img class="iconer" src="{% static 'rewyndapp/images/media-skip-forward.svg' %}" alt="skip-forward">
         </button>
       </div>
     </div>
+    <!-- TWEET CONTENT -->
     <div class="container">
       <div class="d-flex flex-column-reverse align-items-center">
         {% for tweet in tweet_list %}
@@ -39,11 +43,11 @@
               <p class="card-text mb-1">{{ tweet.text }}</p>
               {% if tweet.has_media %}
                 {% if tweet.media_type == "photo" %}
-              <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
+                <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
                 {% else %}
-              <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
-                <source src="{{tweet.media_image_url}}" type="video/mp4"/>
-              </video>
+                <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
+                  <source src="{{tweet.media_image_url}}" type="video/mp4"/>
+                </video>
                 {% endif %}
               {% endif %}
             </div>
@@ -63,6 +67,7 @@
   {% else %}
     <p>Tweets for this episode coming soon!</p>
   {% endif %}
+</div>
 {% endblock content %}
 {% block scripts %}{{ block.super }}
     <script>
