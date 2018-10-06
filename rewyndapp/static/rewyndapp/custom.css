@@ -10,6 +10,12 @@
   filter:invert(0.8);
 }
 
+.iconer2 {
+  height: 1rem;
+  margin: 0.2rem;
+  filter:invert(1);
+}
+
 .slider {
     -webkit-appearance: none;
     width: 100%;
@@ -50,7 +56,45 @@
   border-radius: 5px
 }
 
+.mybutton {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  padding: .375rem .75rem;
+  border: 1px solid rgba(0,0,0,0);
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+}
+
+.blue1 {
+  background-color: #4f84d6;
+  color: white;
+  font-weight: 700;
+}
+
+.mybutton:focus {
+  outline: none;
+}
+
+.mybutton:active {
+  filter:invert(0.1);
+  border-top: 1px solid rgba(100,100,100,1);
+  border-left: 1px solid rgba(100,100,100,1);
+}
+
+.blue1:hover {
+  background-color: #4f7abc;
+}
+
 /* for responsive text */
+.restext_maintitle {
+  font-size: calc( 40px + (65 - 40) * ( (100vw - 320px) / ( 1600 - 320) ));
+}
+
 .restext_title {
   font-size: calc( 20px + (30 - 20) * ( (100vw - 320px) / ( 1600 - 320) ));
 }

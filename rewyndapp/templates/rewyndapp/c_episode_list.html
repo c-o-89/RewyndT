@@ -7,7 +7,7 @@
   <div class="container w-75">
     {% for season in seasons %}
     <div class="List-group" id="Season {{ season }}">
-      <button type="button" class="ses btn btn-secondary btn-block my-2"><b>Season {{ season }}</b></button>
+      <button type="button" class="ses mybutton blue1 btn-block my-1">Season {{ season }}</button>
       <div style="display:none" >
       {% for episode in episode_list %}
         {% if season == episode.season_num %}
