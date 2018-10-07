@@ -15,12 +15,12 @@
   {% if tweet_list %}
   <!-- TIME SLIDER -->
   <div class="container">
-    <div class="row mx-0 mb-1 py-2">
-      <div class="col-auto pr-2 pl-0 clocks restext_1" id="clock1">0:00:00</div>
-      <div class="col p-0 my-auto">
+    <div class="row mx-0 mb-1 py-2 justify-content-between">
+      <div class="col pr-2 pl-0 clocks restext_1 m-auto flex-grow-0" id="clock1">0:00:00</div>
+      <div class="col p-0 my-auto flex-grow-1">
         <input type="range" class="slider my-auto" id="timeslider" min="0" max="{{tweet_list.0.episode.episode_len|interval|add:sdelta}}" value=0>
       </div>
-      <div class="col-auto pr-0 pl-2 clocks restext_1" id="clock2">-0:45:00</div>
+      <div class="col pr-0 pl-2 clocks restext_1 m-auto flex-grow-0 text-right" id="clock2">-0:45:00</div>
     </div>
   </div>
   <!-- CONTROL BUTTONS -->

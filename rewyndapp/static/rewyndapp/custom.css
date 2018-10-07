@@ -90,6 +90,10 @@
   background-color: #4f7abc;
 }
 
+.clocks {
+  flex-basis: 10%;
+}
+
 /* for responsive text */
 .restext_maintitle {
   font-size: calc( 40px + (65 - 40) * ( (100vw - 320px) / ( 1600 - 320) ));

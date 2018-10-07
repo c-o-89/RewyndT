@@ -16,13 +16,13 @@ body {
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="{% url 'rewyndapp:programs_page' %}">Programs</a>
+      <a class="nav-item nav-link" href="{% url 'rewyndapp:programs_page' %}">Programs</a>
       <a class="nav-item nav-link" href="{% url 'rewyndapp:about_page' %}">About</a>
     </div>
   </div>
 </nav>
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb mb-0">
+  <ol class="breadcrumb mb-2 py-2" style="font-size:0.9rem">
     {% block breadcrumb %}{% endblock breadcrumb %}
   </ol>
 </nav>
