@@ -9,80 +9,85 @@
   <div class="container p-0" style="max-width: 600px">
   {% if tweet_list %}
   <!-- TIME SLIDER -->
-    <div class="container">
-      <div class="row mx-0 mb-1 py-2" >
-        <div class="col-auto pr-2 pl-0 clocks restext_1" id="clock1">0:00:00</div>
-        <div class="col p-0 my-auto">
-          <input type="range" class="slider my-auto" id="timeslider" min="0" max="{{tweet_list.0.episode.episode_len|interval|add:sdelta}}" value=0>
+  <div class="container">
+    <div class="row mx-0 mb-1 py-2">
+      <div class="col-auto pr-2 pl-0 clocks restext_1" id="clock1">0:00:00</div>
+      <div class="col p-0 my-auto">
+        <input type="range" class="slider my-auto" id="timeslider" min="0" max="{{tweet_list.0.episode.episode_len|interval|add:sdelta}}" value=0>
+      </div>
+      <div class="col-auto pr-0 pl-2 clocks restext_1" id="clock2">-0:45:00</div>
+    </div>
+  </div>
+  <!-- CONTROL BUTTONS -->
+  <div class="container mb-2">
+    <div class="m-auto row">
+      <button type="button" class="mybutton blue1 col-auto mr-2" id="control-back" onclick="skipBack()">
+        <img class="iconer2" src="{% static 'rewyndapp/images/media-skip-backward.svg' %}" alt="skip-backward">
+      </button>
+      <button type="button" class="mybutton blue1 col" id="play_pause" onclick="toggleTime()">
+        Play
+      </button>
+      <button type="button" class="mybutton blue1 col-auto ml-2" id="control-forward" onclick="skipForward()">
+        <img class="iconer2" src="{% static 'rewyndapp/images/media-skip-forward.svg' %}" alt="skip-forward">
+      </button>
+    </div>
+  </div>
+  <!-- TWEET CONTENT -->
+  <div class="container">
+    <div class="d-flex flex-column-reverse align-items-center">
+      <!-- The Introductory Tweet -->
+      <div class="card w-100 pb-0 mb-2 tweetcard restext_2" time_stamp="0" id="preview">
+        <div class="card-body px-2 pt-2 pb-0">
+          <p class="h6 card-title d-inline-flex mb-1 restext_1">Rewynd</p>
+          <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@rewynd_app</p>
+          <p class="card-text mb-1">Ready? Hit play to start! {{tweet_list.0.episode.program.name}}
+             Ep. {{tweet_list.0.episode.episode_num}} - {{tweet_list.0.episode.episode_name}}
+              is {% widthratio tweet_list.0.episode.episode_len|interval 60000 1 %} mins long and has
+              {% widthratio sdelta 60000 1 %} mins of tweets after the show. The first tweet is at
+              {{ tweet_list.0.interval }}</p>
         </div>
-        <div class="col-auto pr-0 pl-2 clocks restext_1" id="clock2">-0:45:00</div>
+        <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
+          <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
+          <div class="m-1 mr-3">323</div>
+          <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="heart">
+          <div class="m-1 mr-3">213</div>
+          <img class="iconer" src="{% static 'rewyndapp/images/clock.svg' %}" alt="clock">
+          <div class="m-1">0:00:00</div>
+        </div>
       </div>
-    </div>
-    <!-- CONTROL BUTTONS -->
-      <div class="container mb-2">
-        <div class="m-auto row">
-        <button type="button" class="mybutton blue1 col-auto mr-2" id="control-back" onclick="skipBack()">
-          <img class="iconer2" src="{% static 'rewyndapp/images/media-skip-backward.svg' %}" alt="skip-backward">
-        </button>
-        <button type="button" class="mybutton blue1 col" id="play_pause" onclick="toggleTime()">
-            Play
-        </button>
-        <button type="button" class="mybutton blue1 col-auto ml-2" id="control-forward" onclick="skipForward()">
-          <img class="iconer2" src="{% static 'rewyndapp/images/media-skip-forward.svg' %}" alt="skip-forward">
-        </button>
+      {% for tweet in tweet_list %}
+      <div class="card w-100 pb-0 mb-2 tweetcard restext_2" style="display:none" time_stamp="{{ tweet.interval|interval  }}" id="time-{{ tweet.interval|interval  }}">
+        <div class="card-body px-2 pt-2 pb-0">
+          <p class="h6 card-title d-inline-flex mb-1 restext_1">{{ tweet.tweeter.name }}</p>
+          <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@{{ tweet.tweeter.screen_name }}</p>
+          <p class="card-text mb-1">{{ tweet.text }}</p>
+          {% if tweet.has_media %}
+          {% if tweet.media_type == "photo" %}
+          <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
+          {% else %}
+          <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
+            <source src="{{tweet.media_image_url}}" type="video/mp4" />
+          </video>
+          {% endif %}
+          {% endif %}
+        </div>
+        <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
+          <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
+          <div class="m-1 mr-3">{{ tweet.retweets }}</div>
+          <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="heart">
+          <div class="m-1 mr-3">{{ tweet.favorites }}</div>
+          <img class="iconer" src="{% static 'rewyndapp/images/clock.svg' %}" alt="clock">
+          <div class="m-1">{{ tweet.interval }}</div>
+        </div>
       </div>
+      {% endfor %}
     </div>
-    <!-- TWEET CONTENT -->
-    <div class="container">
-      <div class="d-flex flex-column-reverse align-items-center">
-        {% for tweet in tweet_list %}
-          <div class="card w-100 pb-0 mb-2 tweetcard restext_2" style="display:none" time_stamp="{{ tweet.interval|interval  }}" id="time-{{ tweet.interval|interval  }}" >
-            <div class="card-body px-2 pt-2 pb-0">
-              <p class="h6 card-title d-inline-flex mb-1 restext_1">{{ tweet.tweeter.name }}</p>
-              <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@{{ tweet.tweeter.screen_name }}</p>
-              <p class="card-text mb-1">{{ tweet.text }}</p>
-              {% if tweet.has_media %}
-                {% if tweet.media_type == "photo" %}
-                <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
-                {% else %}
-                <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
-                  <source src="{{tweet.media_image_url}}" type="video/mp4"/>
-                </video>
-                {% endif %}
-              {% endif %}
-            </div>
-            <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
-                <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
-                <div class="m-1 mr-3">{{ tweet.retweets }}</div>
-                <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="heart">
-                <div class="m-1 mr-3">{{ tweet.favorites }}</div>
-                <img class="iconer" src="{% static 'rewyndapp/images/clock.svg' %}" alt="clock">
-                <div class="m-1">{{ tweet.interval }}</div>
-            </div>
-          </div>
-        {% endfor %}
-              <div class="card w-100 pb-0 mb-2 tweetcard restext_2" time_stamp="0" id="preview" >
-                <div class="card-body px-2 pt-2 pb-0">
-                  <p class="h6 card-title d-inline-flex mb-1 restext_1">Rewynd</p>
-                  <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@rewynd_app</p>
-                  <p class="card-text mb-1">Ready to begin? Hit play to start! The first tweet is at {{ tweet_list.0.interval }}</p>
-                </div>
-                <div class="text-muted py-0 pl-2 d-flex flex-row align-items-center">
-                    <img class="iconer" src="{% static 'rewyndapp/images/loop-square.svg' %}" alt="loop-square">
-                    <div class="m-1 mr-3">323</div>
-                    <img class="iconer" src="{% static 'rewyndapp/images/heart.svg' %}" alt="heart">
-                    <div class="m-1 mr-3">213</div>
-                    <img class="iconer" src="{% static 'rewyndapp/images/clock.svg' %}" alt="clock">
-                    <div class="m-1">0:00:00</div>
-                </div>
-            </div>
-      </div>
-    </div>
+  </div>
 
   {% else %}
-    <p>Tweets for this episode coming soon!</p>
+  <p>Tweets for this episode coming soon!</p>
   {% endif %}
-</div>
+  </div>
 {% endblock content %}
 {% block scripts %}{{ block.super }}
     <script>
@@ -188,6 +193,70 @@
         return Number($(this).attr("time_stamp")) > Number(slider.val());
       }).hide();
     }
+
+    // continuously increases slider by 15 seconds whilst button is held down
+    var ff = $('#control-forward');
+    var ff_toggle = 0; // fastforward toggle
+    var ff_toggle2
+
+    function ffDown(event) {
+      if(ff_toggle==0) { // default is off to prevent multiple loops
+        ff_toggle = setInterval(skipForward, 50);
+      }
+    }
+
+    function ffUp(event) {
+      if(ff_toggle!=0) {
+        clearInterval(ff_toggle);
+        ff_toggle = 0;
+      }
+    }
+
+    ff.on('mousedown', function(){
+      ff_toggle2 = setTimeout(ffDown, 500);
+    })
+
+    ff.on('mouseup', function(){
+      clearTimeout(ff_toggle2);
+      ffUp();
+    })
+
+    ff.on('mouseout', function(){
+      clearTimeout(ff_toggle2);
+      ffUp();
+    })
+
+    // continuously decreases slider by 15 seconds whilst button is held down
+    var rwd = $('#control-back');
+    var rwd_toggle = 0; // fast rewind toggle
+    var rwd_toggle2
+
+    function rwdDown(event) {
+      if(rwd_toggle==0) { // default is off to prevent multiple loops
+        rwd_toggle = setInterval(skipBack, 50);
+      }
+    }
+
+    function rwdUp(event) {
+      if(rwd_toggle!=0) {
+        clearInterval(rwd_toggle);
+        rwd_toggle = 0;
+      }
+    }
+
+    rwd.on('mousedown', function(){
+      rwd_toggle2 = setTimeout(rwdDown, 500);
+    })
+
+    rwd.on('mouseup', function(){
+      clearTimeout(rwd_toggle2);
+      rwdUp();
+    })
+
+    rwd.on('mouseout', function(){
+      clearTimeout(rwd_toggle2);
+      rwdUp();
+    })
 
     // testing function
     function showT() {
