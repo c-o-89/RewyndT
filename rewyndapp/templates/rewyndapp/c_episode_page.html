@@ -2,7 +2,12 @@
 
 {% block title %}Tweets for: {{tweet_list.0.episode.episode_name}}{% endblock title %}
 {% block header %} {{ block.super }} {% endblock header %}
-{% block h1 %}<h1 class="text-center mt-2 mb-0 restext_title">Tweets for: {{tweet_list.0.episode.episode_name}}</h1>{% endblock h1 %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'rewyndapp:programs_page' %}">Programs</a></li>
+<li class="breadcrumb-item"><a href="{% url 'rewyndapp:program_listview' tweet_list.0.episode.program.id %}">{{tweet_list.0.episode.program.name}}</a></li>
+<li class="breadcrumb-item active" aria-current="page">S{{tweet_list.0.episode.season_num}}:E{{tweet_list.0.episode.episode_num}} {{tweet_list.0.episode.episode_name}}</li>
+{% endblock breadcrumb %}
+{% block h1 %}<h1 class="text-center mt-2 mb-0 restext_title">Episode {{tweet_list.0.episode.episode_num}}: {{tweet_list.0.episode.episode_name}}</h1>{% endblock h1 %}
 {% block content %}
   {% load static %}
   {% load custom_tags %}
@@ -41,7 +46,7 @@
           <p class="h6 card-title d-inline-flex mb-1 restext_1">Rewynd</p>
           <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@rewynd_app</p>
           <p class="card-text mb-1">Ready? Hit play to start! {{tweet_list.0.episode.program.name}}
-             Ep. {{tweet_list.0.episode.episode_num}} - {{tweet_list.0.episode.episode_name}}
+             Ep. {{tweet_list.0.episode.episode_num}}: {{tweet_list.0.episode.episode_name}}
               is {% widthratio tweet_list.0.episode.episode_len|interval 60000 1 %} mins long and has
               {% widthratio sdelta 60000 1 %} mins of tweets after the show. The first tweet is at
               {{ tweet_list.0.interval }}</p>
@@ -65,7 +70,7 @@
           {% if tweet.media_type == "photo" %}
           <img src="{{tweet.media_image_url}}" class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}">
           {% else %}
-          <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" autoplay loop muted>
+          <video class="my-1 my-md-2 twitmedia" alt="{{tweet.media_image_url}}" playsinline autoplay loop muted>
             <source src="{{tweet.media_image_url}}" type="video/mp4" />
           </video>
           {% endif %}
