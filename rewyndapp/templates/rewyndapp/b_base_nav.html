@@ -1,5 +1,6 @@
 {% extends "rewyndapp/a_base.html" %}
 {% block head %} {{ block.super }}
+{% load static %}
 <style>
 body {
   background-image: linear-gradient(to top, #efefef 0%, #f7f7f7 75%, #ffffff 100%);
@@ -9,17 +10,10 @@ body {
 </style>
  {% endblock head %}
 {% block header %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0">
-  <a class="navbar-brand" href="{% url 'rewyndapp:index' %}">RewyndApp</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="{% url 'rewyndapp:programs_page' %}">Programs</a>
-      <a class="nav-item nav-link" href="{% url 'rewyndapp:about_page' %}">About</a>
-    </div>
-  </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 justify-content-start">
+  <a class="navbar-brand mr-2" href="{% url 'rewyndapp:index' %}">RewyndApp</a>
+  <a class="nav-item nav-link px-1 text-secondary" href="{% url 'rewyndapp:programs_page' %}">Programs</a>
+  <a class="nav-item nav-link px-1 text-secondary mr-auto" href="{% url 'rewyndapp:about_page' %}">About</a>
 </nav>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb mb-2 py-2" style="font-size:0.9rem">

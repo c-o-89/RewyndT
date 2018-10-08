@@ -4,6 +4,10 @@
     background-size: cover;
 }
 
+html, body {
+  min-height: 100.1%;
+}
+
 .iconer {
   height: 1rem;
   margin: 0.2rem;
@@ -70,10 +74,20 @@
   border-radius: .25rem;
 }
 
+a.mybutton:hover {
+  color: white;
+  text-decoration: none;
+}
+
 .blue1 {
   background-color: #4f84d6;
   color: white;
   font-weight: 700;
+}
+
+nav ol li a {
+  color: #6c757d;
+  text-decoration: underline;
 }
 
 .mybutton:focus {

@@ -21,6 +21,7 @@ def programs_page(request):
 
 def program_listview(request, program_id):
     episode_list = Program.objects.get(pk=program_id).episode_set.filter(is_active=True)
+    program = Program.objects.get(pk=program_id)
     # use get_list_or_404 here
     w = map(lambda x: x.season_num, episode_list)
     seasons = list(set(w))
@@ -28,6 +29,7 @@ def program_listview(request, program_id):
     context = {
         "episode_list": episode_list,
         "seasons": seasons,
+        "program": program,
     }
     return render(request, template, context)
 

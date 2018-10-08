@@ -3,9 +3,9 @@
 {% block title %} {{episode_list.0.program}} Episodes {% endblock title %}
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{% url 'rewyndapp:programs_page' %}">Programs</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{episode_list.0.program}}</li>
+<li class="breadcrumb-item active" aria-current="page">{{program.name}}</li>
 {% endblock breadcrumb %}
-{% block h1 %} <h1 class="text-center mb-3">{{episode_list.0.program}} Episodes</h1> {% endblock h1 %}
+{% block h1 %} <h1 class="text-center mb-3">{{program.name}} Episodes</h1> {% endblock h1 %}
 {% block content %}
 {% if episode_list %}
   <div class="container w-75">
