@@ -45,8 +45,9 @@
         <div class="card-body px-2 pt-2 pb-0">
           <p class="h6 card-title d-inline-flex mb-1 restext_1">Rewynd</p>
           <p class="h6 card-subtitle d-inline-flex text-muted restext_1">@rewynd_app</p>
-          <p class="card-text mb-1">Ready? Hit play to start! {{tweet_list.0.episode.program.name}}
-             Ep. {{tweet_list.0.episode.episode_num}}: {{tweet_list.0.episode.episode_name}}
+          <p class="card-text mb-1">Ready? Hit play to start!
+            S{{tweet_list.0.episode.season_num}}:E{{tweet_list.0.episode.episode_num}}
+            {{tweet_list.0.episode.episode_name}}
               is {% widthratio tweet_list.0.episode.episode_len|interval 60000 1 %} mins long and has
               {% widthratio sdelta 60000 1 %} mins of tweets after the show. The first tweet is at
               {{ tweet_list.0.interval }}</p>
