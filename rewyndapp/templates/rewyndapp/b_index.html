@@ -116,7 +116,7 @@ p a.btn {
     <div class="col-sm-7 d-flex flex-column justify-content-sm-center text-center">
       <div class="mt-3 mt-sm-0">
         <h1 class="restext_maintitle display-3">Rewynd</h1>
-        <p class="lead mb-4"><em>Live tweets from your favorite shows, on cue</em></p> <!-- Never miss a tweet   -->
+        <p class="lead mb-4"><em>Live tweets from your favorite shows,<br class="d-sm-none"/> on cue</em></p> <!-- Never miss a tweet poster="{% static 'rewyndapp/images/demostill2.png' %}"  -->
         <p class="lead">
           <a href="{% url 'rewyndapp:programs_page' %}" class="mybutton blue1 px-3 py-2
            d-none d-md-inline">Start Rewynd</a>
@@ -129,9 +129,9 @@ p a.btn {
       align-items-center align-items-sm-start hovering">
         <div class="video-wrapper mylink">
           <img src="{% static 'rewyndapp/images/iphoneblack.png' %}" class="frame">
-          <video playsinline autoplay="autoplay" preload="auto" loop="loop" onended="play" class="video"
-          poster="{% static 'rewyndapp/images/demostill2.png' %}">
-            <source src="https://s3.us-east-2.amazonaws.com/rewyndappbucket/demo.mp4" type="video/mp4">
+          <video class="video" preload="auto" playsinline autoplay loop muted poster="{% static 'rewyndapp/images/demostill2.png' %}">
+            <source src="https://s3.us-east-2.amazonaws.com/rewyndappbucket/demoreduced.webm" type="video/webm">
+            <source src="https://s3.us-east-2.amazonaws.com/rewyndappbucket/demoshort.mp4" type="video/mp4">
           </video>
         </div>
       </a>
